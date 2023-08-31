@@ -6,5 +6,7 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    //
+    function apiLogin(Request $request){
+        
+    }
 }

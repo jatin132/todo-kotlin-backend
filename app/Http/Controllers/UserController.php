@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator as FacadesValidator;
-use Image;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -28,18 +29,12 @@ class UserController extends Controller
             if ($user) {
                 return response()->json(['error'=>"User already exists"], 422);
             }
+            
             $file = $request->file('profile_photo');
-    
-            $data = [
-                'uuid' => random_strings(7, 'users'),
-                'email' => $request->get('email'),
-                'password' => Hash::make($request->get('password')),
-                'username' => $request->get('username'),
-                'profile_photo' => $file,
-            ];
 
             $fileName = time() . '.' . $file->getClientOriginalExtension();
             $img = Image::make($file->getRealPath());
+            $img->resize(200, 200);
             $img->stream(); 
 
             $path = Storage::disk('local')->put('profile_pictures' . '/' . $fileName, $img, 'public');
@@ -47,6 +42,14 @@ class UserController extends Controller
             if (!$path) {
                 return response()->json(['msg' => 'Failed to upload photo.'], 500);
             }
+
+            $data = [
+                'uuid' => random_strings(7, 'users'),
+                'username' => $request->get('username'),
+                'email' => $request->get('email'),
+                'password' => Hash::make($request->get('password')),
+                'profile_photo' => $file,
+            ];
 
             $user = User::create($data);
 
@@ -62,7 +65,26 @@ class UserController extends Controller
         
     }
 
-    function deviceLogout(Request $request){
-        
-    }
+    function deviceLogout(Request $request, $android_id){
+        try {
+            $user = $request->user();
+
+            $device = Device::where("user_id", $user->id)
+            ->where("device_id", $android_id)
+            ->first();
+
+            if(!$device) {
+                return response()->json(['msg' => "Device not found"]);
+            } else {
+                $device->delete();
+            }
+
+            $user->currentAccessToken()->delete();
+
+            return response()->json(["msg" => "Logout successfully"]);
+
+        } catch (\Throwable $th) {
+            return response()->json(['msg'=>$th->getMessage()], 500);
+        }
+    }   
 }

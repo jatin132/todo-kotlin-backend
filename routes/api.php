@@ -26,17 +26,17 @@ use Illuminate\Support\Facades\Route;
 
 
 // authenticatoin routes
-Route::post('/login', [AuthController::class, 'apiLogin']);
-Route::post('/register', [UserController::class, 'apiSignUp']);
-Route::post('/reset-passowrd/{email}/{otp}', [PasswordController::class, 'resetPassword']);
+Route::post('/login', [AuthController::class, 'apiLogin']); // complete
+Route::post('/register', [UserController::class, 'apiSignUp']); // complete
+Route::post('/reset-password/{email}/{otp}', [PasswordController::class, 'resetPassword']); // complete
 
 /**
  * Send otp
  * otp verification
  * resend otp 
 */
-Route::post('/send-otp',[OtpController::class,'sendOtp']);
-Route::post('/otp-verification/{otpVerification}',[OtpController::class,'verifyOtp']);
+Route::post('/send-otp',[OtpController::class,'sendOtp']); 
+Route::post('/otp-verification/{otp}',[OtpController::class,'verifyOtp']); // complete
 Route::post('/resend',[OtpController::class,'resentOtp']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -49,11 +49,11 @@ Route::group(["middleware"=> ['auth:sanctum']], function (){
 
         // user routes
         $route->post('/get-user', [UserController::class, 'getUserDetails']);
-        $route->post('/logout', [UserController::class, 'deviceLogout']);
-        $route->post('/add-tokens', [DeviceController::class, 'addTokenOnAuthentication']);
+        $route->delete('/logout/{android_id}', [UserController::class, 'deviceLogout']); // complete
+        $route->post('/add-tokens', [DeviceController::class, 'addTokenOnAuthentication']); // complete
 
         // password routes
-        $route->post('/change-password/{uuid}', [PasswordController::class, 'changePassword']);
+        $route->post('/change-password/{uuid}', [PasswordController::class, 'changePassword']); // complete
 
         // add member routes
         $route->post('/add-member-profile/{user_id}/{member_id}', [AddMemberController::class, 'addMemeberToProfile']);

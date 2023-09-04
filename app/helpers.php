@@ -30,6 +30,12 @@ function random_strings($length_of_string, $model_name){
     if ($model_name == 'Todo') {
         $already = Todo::where("uuid", $uuid)->first();
     }
+
+    if ($already) {
+        return random_strings($length_of_string, $model_name);
+    }
+
+    return strtolower($uuid);
 }
 
 ?>

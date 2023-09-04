@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// this route is for user profile image
+Route::get('image/{filename}', function ($filename) {
+    $path = storage_path('app/profile_pictures/' . $filename);
+    
+    if (!File::exists($path)) {
+        abort(404);
+    }
+    
+    $file = File::get($path);
+    $type = File::mimeType($path);
+    $response = response($file, 200)->header("Content-Type", $type);
+    
+    return $response;
+})->name('profile_picture');

@@ -1,7 +1,7 @@
 <?php
 
-// return [
+return [
 
-//     'authentication_key' => env('FCM_API_KEY')
+    'authentication_key' => env('FCM_API_KEY')
 
-// ];
+];

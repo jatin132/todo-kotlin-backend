@@ -13,4 +13,12 @@ class AddMemberController extends Controller
     function addMemeberToProject(Request $request){
         
     }
+
+    function getAddedMembers(Request $request){
+        
+    }
+
+    function searchUsers(Request $request){
+        
+    }
 }

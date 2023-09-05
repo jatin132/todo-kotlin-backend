@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Device;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator as FacadesValidator;
@@ -65,7 +66,16 @@ class UserController extends Controller
     }
 
     function getUserDetails(Request $request){
-        
+        try {
+            $user = Auth::user();
+            if (!$user) {
+                return response()->json(['msg'=>'User not found!'], 422);
+            }
+
+            return response()->json($user, 500);
+        } catch (\Throwable $th) {
+            return response()->json(['msg'=>$th->getMessage()], 500);
+        }    
     }
 
     function deviceLogout(Request $request, $android_id){

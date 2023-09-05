@@ -18,7 +18,6 @@ class Project extends Model
         'uuid',
         'project_name',
         'project_description',
-        'project_description',
         'cover_photo',
         'user_id',
     ];

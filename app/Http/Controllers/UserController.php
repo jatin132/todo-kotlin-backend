@@ -43,15 +43,18 @@ class UserController extends Controller
                 return response()->json(['msg' => 'Failed to upload photo.'], 500);
             }
 
+
             $data = [
                 'uuid' => random_strings(7, 'users'),
                 'username' => $request->get('username'),
                 'email' => $request->get('email'),
                 'password' => Hash::make($request->get('password')),
-                'profile_photo' => $file,
+                'profile_photo' => $fileName,
             ];
 
             $user = User::create($data);
+
+            // dd($user);
 
             $token = $user->createToken($request->device)->plainTextToken;
 

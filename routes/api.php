@@ -43,7 +43,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
 Route::group(["middleware"=> ['auth:sanctum']], function (){
     Route::group(['prefix'=>'v1'], function ($route){
 
@@ -63,25 +62,25 @@ Route::group(["middleware"=> ['auth:sanctum']], function (){
         $route->post('/add-member-project/{project_id}/{member_id}/{task_id}', [AddProjectTaskController::class, 'addTaskToProject']);
 
         // duration task routes
-        $route->post('/create-task', [DurationTaskController::class, 'createTask']);
-        $route->post('/delete-task/{uuid}', [DurationTaskController::class, 'deleteTask']);
-        $route->post('/edit-task/{uuid}', [DurationTaskController::class, 'editTask']);
-        $route->post('/get-today-tasks/{uuid}', [DurationTaskController::class, 'getTodayTasks']);
-        $route->post('/get-all-tasks/{uuid}', [DurationTaskController::class, 'getAllTasks']);
+        $route->post('/create-task/{user_id}', [DurationTaskController::class, 'createTask']);
+        $route->delete('/delete-task/{uuid}', [DurationTaskController::class, 'deleteTask']);
+        $route->put('/edit-task/{uuid}', [DurationTaskController::class, 'editTask']);
+        $route->get('/get-today-tasks/{user_id}', [DurationTaskController::class, 'getTodayTasks']);
+        $route->get('/get-all-tasks/{user_id}', [DurationTaskController::class, 'getAllTasks']);
 
         // project routes
-        $route->post('/create-project', [ProjectController::class, 'createProject']);
-        $route->post('/delete-project/{uuid}', [ProjectController::class, 'deleteProject']);
-        $route->post('/edit-project/{uuid}', [ProjectController::class, 'editProject']);
-        $route->post('/get-all-projects/{uuid}', [ProjectController::class, 'getProjects']);
+        $route->post('/create-project/{user_id}', [ProjectController::class, 'createProject']);
+        $route->delete('/delete-project/{uuid}', [ProjectController::class, 'deleteProject']);
+        $route->put('/edit-project/{uuid}', [ProjectController::class, 'editProject']);
+        $route->get('/get-all-projects/{user_id}', [ProjectController::class, 'getProjects']);
 
         // todos routes
-        $route->post('/create-todo', [TodoController::class, 'createTodo']);
-        $route->post('/delete-todo/{uuid}', [TodoController::class, 'deleteTodo']);
-        $route->post('/edit-todo/{uuid}', [TodoController::class, 'editTodo']);
+        $route->post('/create-todo/{user_id}', [TodoController::class, 'createTodo']);
+        $route->delete('/delete-todo/{uuid}', [TodoController::class, 'deleteTodo']);
+        $route->put('/edit-todo/{uuid}', [TodoController::class, 'editTodo']);
         $route->post('/mark-complete-todo/{uuid}', [TodoController::class, 'markComplete']);
-        $route->post('/get-today-todos/{uuid}', [TodoController::class, 'getTodayTodos']);
-        $route->post('/get-all-todos/{uuid}', [TodoController::class, 'getAllTodos']);
+        $route->get('/get-today-todos/{user_id}', [TodoController::class, 'getTodayTodos']);
+        $route->get('/get-all-todos/{user_id}', [TodoController::class, 'getAllTodos']);
 
     });
 });

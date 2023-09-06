@@ -50,4 +50,34 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+     /**
+     * The roles that belong to the DurationTask
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function projects()
+    {
+        return $this->belongsToMany(User::class, 'projects');
+    }
+
+    /**
+     * The roles that belong to the DurationTask
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function todos()
+    {
+        return $this->belongsToMany(User::class, 'todos');
+    }
+
+    /**
+     * The roles that belong to the DurationTask
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function durationTasks()
+    {
+        return $this->belongsToMany(User::class, 'duration_tasks');
+    }
 }

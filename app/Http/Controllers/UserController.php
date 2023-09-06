@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Device;
+use App\Models\Todo;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -67,14 +68,32 @@ class UserController extends Controller
 
     function getUserDetails(Request $request){
         try {
-            $user = Auth::user();
+            $user = $request->user()
+                ->withCount('projects')
+                ->withCount('todos')
+                ->withCount('durationTasks')
+                ->first();
+                
             if (!$user) {
-                return response()->json(['msg'=>'User not found!'], 422);
+                return response()->json(['msg' => 'User not found!'], 404);
+            } 
+
+            $completedTodos = Todo::where('user_id', $user->id)
+                ->where('is_completed', 1)->count();
+
+            $totalTodos = $user->todos_count; // Get the total todos count from the user model
+
+            $completionRate = 0;
+            if ($totalTodos > 0) {
+                $completionRate = ($completedTodos / $totalTodos) * 100;
             }
 
-            return response()->json($user, 500);
+            return response()->json([
+                'user' => $user,
+                'completion_rate' => $completionRate,
+            ], 200);
         } catch (\Throwable $th) {
-            return response()->json(['msg'=>$th->getMessage()], 500);
+            return response()->json(['msg' => $th->getMessage()], 500);
         }    
     }
 

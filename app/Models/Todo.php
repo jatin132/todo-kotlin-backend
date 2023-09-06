@@ -21,4 +21,14 @@ class Todo extends Model
         'is_completed',
         'user_id',
     ];
+
+    /**
+     * The roles that belong to the DurationTask
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function todos()
+    {
+        return $this->belongsToMany(User::class, 'todos');
+    }
 }

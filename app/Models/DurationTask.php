@@ -27,8 +27,8 @@ class DurationTask extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function projects()
+    public function durationTasks()
     {
-        return $this->belongsToMany(Project::class, 'projects');
+        return $this->belongsToMany(User::class, 'duration_tasks');
     }
 }

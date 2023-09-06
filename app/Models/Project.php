@@ -21,4 +21,14 @@ class Project extends Model
         'cover_photo',
         'user_id',
     ];
+
+    /**
+     * The roles that belong to the DurationTask
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function projects()
+    {
+        return $this->belongsToMany(User::class, 'projects');
+    }
 }

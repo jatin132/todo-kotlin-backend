@@ -67,7 +67,7 @@ Route::group(["middleware"=> ['auth:sanctum']], function (){
         $route->post('/create-task/{user_id}', [DurationTaskController::class, 'createTask']);
         $route->delete('/delete-task/{uuid}', [DurationTaskController::class, 'deleteTask']);
         $route->put('/edit-task/{uuid}', [DurationTaskController::class, 'editTask']);
-        $route->get('/get-today-tasks/{user_id}', [DurationTaskController::class, 'getTodayTasks']);
+        $route->get('/get-today-tasks/{user_id}/{current_date}', [DurationTaskController::class, 'getTodayTasks']);
         $route->get('/get-all-tasks/{user_id}', [DurationTaskController::class, 'getAllTasks']);
 
         // project routes

@@ -34,7 +34,7 @@ class DurationTaskController extends Controller
 
             $durationTasks = DurationTask::create($data);
 
-            return response()->json(['msg'=>'Task added successfully!'], 422);
+            return response()->json(['msg'=>'Task added successfully!'], 200);
 
         } catch (\Throwable $th) {
             return response()->json(['msg'=>$th->getMessage()], 500);
@@ -50,7 +50,7 @@ class DurationTaskController extends Controller
 
             $task->delete();
 
-            return response()->json(['msg'=>'Task deleted successfully!'], 422);
+            return response()->json(['msg'=>'Task deleted successfully!'], 200);
 
         } catch (\Throwable $th) {
             return response()->json(['msg'=>$th->getMessage()], 500);
@@ -78,7 +78,7 @@ class DurationTaskController extends Controller
 
             $task->save();
 
-            return response()->json(['msg'=>'Task edited successfully!'], 422);
+            return response()->json(['msg'=>'Task edited successfully!'], 200);
 
         } catch (\Throwable $th) {
             return response()->json(['msg'=>$th->getMessage()], 500);

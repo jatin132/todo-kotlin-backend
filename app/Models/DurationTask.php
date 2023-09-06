@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class DurationTask extends Model
 {
@@ -20,4 +21,14 @@ class DurationTask extends Model
         'time',
         'user_id',
     ];
+
+    /**
+     * The roles that belong to the DurationTask
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'projects');
+    }
 }

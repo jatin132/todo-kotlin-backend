@@ -80,4 +80,24 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'duration_tasks');
     }
+
+    /**
+     * The roles that belong to the DurationTask
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function addedMembers()
+    {
+        return $this->belongsToMany(User::class, 'added_members', 'user_id', 'member_user_id');
+    }
+
+    /**
+     * The roles that belong to the DurationTask
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function addedMembersToProjects()
+    {
+        return $this->belongsToMany(User::class, 'project_members', 'project_id', 'member_id');
+    }
 }

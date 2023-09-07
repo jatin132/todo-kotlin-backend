@@ -58,10 +58,10 @@ Route::group(["middleware"=> ['auth:sanctum']], function (){
         $route->post('/add-member-profile/{user_id}/{member_id}', [AddMemberController::class, 'addMemeberToProfile']);
         $route->post('/add-member-project/{project_id}/{member_id}', [AddMemberController::class, 'addMemeberToProject']);
         $route->get('/get-added-members/{user_id}', [AddMemberController::class, 'getAddedMembers']);
-        $route->get('/get-users/{user_id}', [AddMemberController::class, 'searchUsers']);
+        $route->get('/search-users/{user_id}', [AddMemberController::class, 'searchUsers']);
 
         // add task to project
-        $route->post('/add-member-project/{project_id}/{member_id}/{task_id}', [AddProjectTaskController::class, 'addTaskToProject']);
+        $route->post('/member-add-tasks/{project_id}/{member_id}/{task_id}', [AddProjectTaskController::class, 'addTaskToProject']);
 
         // duration task routes
         $route->post('/create-task/{user_id}', [DurationTaskController::class, 'createTask']); // complete

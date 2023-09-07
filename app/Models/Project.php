@@ -31,4 +31,14 @@ class Project extends Model
     {
         return $this->belongsToMany(User::class, 'projects');
     }
+
+    /**
+     * The roles that belong to the DurationTask
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function addedMembersToProjects()
+    {
+        return $this->belongsToMany(User::class, 'project_members', 'project_id', 'member_id');
+    }
 }

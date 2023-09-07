@@ -68,12 +68,12 @@ class AddMemberController extends Controller
                 return response()->json(['msg' => 'User not found.'], 404);
             }
 
-            
             $addedUsers = $user->addedMembers()
                 ->select('users.id as user_id', 'profile_photo', 'username', 'email')
+                ->orderBy('users.created_at', 'desc')
                 ->get();
 
-            return response()->json($addedUsers);
+            return response()->json($addedUsers, 200);
 
         } catch (\Throwable $th) {
             return response()->json(['msg'=>$th->getMessage()], 500);

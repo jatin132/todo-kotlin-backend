@@ -89,6 +89,7 @@ class DurationTaskController extends Controller
         try {
             $durationTasks = DurationTask::where('user_id', $user_id)
                                             ->whereDate("created_at", $currentDate)
+                                            ->orderBy('created_at', 'desc')
                                             ->get();
             if (!$durationTasks) {
                 return response()->json(['msg'=>'Tasks not found!'], 422);
@@ -102,7 +103,9 @@ class DurationTaskController extends Controller
 
     function getAllTasks(Request $request, $user_id){
         try {
-            $durationTasks = DurationTask::where('user_id', $user_id)->get();
+            $durationTasks = DurationTask::where('user_id', $user_id)
+                                        ->orderBy('created_at', 'desc')
+                                        ->get();
             if (!$durationTasks) {
                 return response()->json(['msg'=>'Tasks not found!'], 422);
             }

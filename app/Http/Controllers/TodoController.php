@@ -113,8 +113,9 @@ class TodoController extends Controller
     function getTodayTodos(Request $request, $user_id, $currentDate){
         try {
             $todos = Todo::where('user_id', $user_id)
-                                            ->whereDate("created_at", $currentDate)
-                                            ->get();
+                        ->whereDate("created_at", $currentDate)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
             if (!$todos) {
                 return response()->json(['msg'=>'Todos not found!'], 422);
             }
@@ -127,7 +128,9 @@ class TodoController extends Controller
 
     function getAllTodos(Request $request, $user_id){
         try {
-            $todos = Todo::where('user_id', $user_id)->get();
+            $todos = Todo::where('user_id', $user_id)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
             if (!$todos) {
                 return response()->json(['msg'=>'Todos not found!'], 422);
             }

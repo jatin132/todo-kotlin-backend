@@ -76,12 +76,16 @@ class ProjectController extends Controller
 
     function getProjects(Request $request, $user_id){
         try {
-            $userProjects = Project::where('user_id', $user_id)->get();
+            $userProjects = Project::where('user_id', $user_id)
+                                    ->with('members')
+                                    ->with('tasks')
+                                    ->orderBy('created_at', 'desc')
+                                    ->get();
             if (!$userProjects) {
                 return response()->json(['msg'=>'User not found!'], 422);
             }
 
-            return response()->json($userProjects, 500);
+            return response()->json($userProjects, 200);
         } catch (\Throwable $th) {
             return response()->json(['msg'=>$th->getMessage()], 500);
         }    

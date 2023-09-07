@@ -42,6 +42,13 @@ class Project extends Model
         return $this->belongsToMany(User::class, 'project_members', 'project_id', 'member_id');
     }
 
+    public function addTasksToProjects()
+    {
+        return $this->belongsToMany(Project::class, 'project_tasks', 'task_id', 'project_id')
+            ->withPivot('user_id')
+            ->withTimestamps();
+    }
+
     /**
      * The roles that belong to the DurationTask
      *
@@ -59,6 +66,17 @@ class Project extends Model
      */
     public function tasks()
     {
-        return $this->belongsToMany(Project::class, 'project_tasks');
+        return $this->belongsToMany(Todo::class, 'project_tasks', 'project_id', 'task_id');
     }
+
+    /**
+     * The roles that belong to the DurationTask
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'project_tasks', 'project_id', 'user_id');
+    }
+
 }

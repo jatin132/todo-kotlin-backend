@@ -78,7 +78,9 @@ class ProjectController extends Controller
         try {
             $userProjects = Project::where('user_id', $user_id)
                                     ->with('members')
-                                    ->with('tasks')
+                                    ->with(['tasks' => function ($query) {
+                                        $query->with('user'); 
+                                    }])
                                     ->orderBy('created_at', 'desc')
                                     ->get();
             if (!$userProjects) {

@@ -100,4 +100,11 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'project_members', 'project_id', 'member_id');
     }
+
+    public function addTasksToProjects()
+    {
+        return $this->belongsToMany(Project::class, 'project_tasks', 'task_id', 'project_id')
+            ->withPivot('user_id')
+            ->withTimestamps();
+    }
 }

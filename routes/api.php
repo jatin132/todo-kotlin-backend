@@ -55,8 +55,8 @@ Route::group(["middleware"=> ['auth:sanctum']], function (){
         $route->post('/change-password/{uuid}', [PasswordController::class, 'changePassword']); // complete
 
         // add member routes
-        $route->post('/add-member-profile/{user_id}/{member_id}', [AddMemberController::class, 'addMemeberToProfile']);
-        $route->post('/add-member-project/{project_id}/{member_id}', [AddMemberController::class, 'addMemeberToProject']);
+        $route->post('/add-member-profile/{user_id}', [AddMemberController::class, 'addMembersToProfile']);
+        $route->post('/add-member-project/{project_id}', [AddMemberController::class, 'addMembersToProject']);
         $route->get('/get-added-members/{user_id}', [AddMemberController::class, 'getAddedMembers']);
         $route->get('/search-users/{user_id}', [AddMemberController::class, 'searchUsers']);
 

@@ -9,57 +9,83 @@ use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
 class AddMemberController extends Controller
 {
-    function addMemeberToProfile(Request $request, $user_id, $added_user_id){
+    public function addMembersToProfile(Request $request, $user_id){
         try {
             $user = User::find($user_id);
-            $member = User::find($added_user_id);
 
             if (!$user) {
                 return response()->json(['msg' => 'User not found.'], 404);
             }
-    
-            if (!$member) {
-                return response()->json(['msg' => 'Member not found.'], 404);
+
+            $added_user_ids = $request->input('added_user_ids'); // Assuming the input is an array of added_user_ids
+
+            if (empty($added_user_ids)) {
+                return response()->json(['msg' => 'No members provided.'], 400);
             }
 
-            if ($user->addedMembers()->wherePivot('user_id', $user_id)->wherePivot('member_user_id', $added_user_id)->exists()){
-                return response()->json(['msg' => 'Member has already been added.'], 400);
+            $addedMembers = [];
+
+            foreach ($added_user_ids as $added_user_id) {
+                $member = User::find($added_user_id);
+
+                if (!$member) {
+                    return response()->json(['msg' => 'Member not found for user ' . $added_user_id], 404);
+                }
+
+                if ($user->addedMembers()->wherePivot('user_id', $user_id)->wherePivot('member_user_id', $added_user_id)->exists()) {
+                    // Skip members that have already been added.
+                    continue;
+                }
+
+                $user->addedMembers()->attach($added_user_id);
+                $addedMembers[] = $member->toArray();
             }
 
-            $user->addedMembers()->attach($added_user_id);
-
-            return response()->json(['msg' => 'Member added successfully.'], 200);
+            return response()->json(['msg' => 'Members added successfully.', 'added_members' => $addedMembers], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['msg'=>$th->getMessage()], 500);
+            return response()->json(['msg' => $th->getMessage()], 500);
         }
     }
-
-    function addMemeberToProject(Request $request, $project_id, $added_user_id){
+    public function addMembersToProject(Request $request, $project_id){
         try {
             $project = ModelsProject::find($project_id);
-            $member = User::find($added_user_id);
-
+    
             if (!$project) {
                 return response()->json(['msg' => 'Project not found.'], 404);
             }
     
-            if (!$member) {
-                return response()->json(['msg' => 'Member not found.'], 404);
+            $added_user_ids = $request->input('added_user_ids'); // Assuming the input is an array of added_user_ids
+    
+            if (empty($added_user_ids)) {
+                return response()->json(['msg' => 'No members provided.'], 400);
             }
-
-            if ($project->addedMembersToProjects()->wherePivot('project_id', $project_id)->wherePivot('member_id', $added_user_id)->exists()){
-                return response()->json(['msg' => 'Member has already been added.'], 400);
+    
+            $addedMembers = [];
+    
+            foreach ($added_user_ids as $added_user_id) {
+                $member = User::find($added_user_id);
+    
+                if (!$member) {
+                    return response()->json(['msg' => 'Member not found for user ' . $added_user_id], 404);
+                }
+    
+                if ($project->addedMembersToProjects()->wherePivot('project_id', $project_id)->wherePivot('member_id', $added_user_id)->exists()) {
+                    // Skip members that have already been added to the project.
+                    continue;
+                }
+    
+                $project->addedMembersToProjects()->attach($added_user_id);
+                $addedMembers[] = $member->toArray();
             }
-
-            $project->addedMembersToProjects()->attach($added_user_id);
-
-            return response()->json(['msg' => 'Member added successfully to project.'], 200);
-
+    
+            return response()->json(['msg' => 'Members added successfully to project.', 'added_members' => $addedMembers], 200);
+    
         } catch (\Throwable $th) {
-            return response()->json(['msg'=>$th->getMessage()], 500);
+            return response()->json(['msg' => $th->getMessage()], 500);
         }
     }
+    
 
     function getAddedMembers(Request $request, $user_id){
         try {

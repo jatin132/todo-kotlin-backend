@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('uuid');
             $table->string('title');
             $table->string('description');
-            $table->integer('is_completed');
+            $table->integer('is_completed')->nullable();;
             $table->integer('user_id');
             $table->timestamps();
         });

@@ -19,6 +19,7 @@ class Project extends Model
         'project_name',
         'project_description',
         'cover_photo',
+        'is_completed',
         'user_id',
     ];
 

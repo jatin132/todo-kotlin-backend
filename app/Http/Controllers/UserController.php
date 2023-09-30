@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Device;
+use App\Models\DurationTask;
+use App\Models\Project;
 use App\Models\Todo;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -73,29 +75,54 @@ class UserController extends Controller
                 ->withCount('todos')
                 ->withCount('durationTasks')
                 ->first();
-                
+    
             if (!$user) {
                 return response()->json(['msg' => 'User not found!'], 404);
             } 
-
+    
             $completedTodos = Todo::where('user_id', $user->id)
                 ->where('is_completed', 1)->count();
-
-            $totalTodos = $user->todos_count; // Get the total todos count from the user model
-
-            $completionRate = 0;
+    
+            $totalTodos = $user->todos_count;
+    
+            $completionRateTodos = 0;
             if ($totalTodos > 0) {
-                $completionRate = ($completedTodos / $totalTodos) * 100;
+                $completionRateTodos = ($completedTodos / $totalTodos) * 100;
             }
+    
+            $completedProjects = $user->projects()
+                ->where('is_completed', 1)->count();
 
+            $totalProjectsTasks = $user->projectsTasks()
+            ->where('project_tasks.user_id', $user->id) 
+            ->count();            
+    
+            $completedProjectsTasks = $user->projectsTasks()
+            ->with(['tasks' => function ($query) {
+                $query->where('is_completed', 1);
+            }])
+            ->get()
+            ->pluck('tasks_count')
+            ->sum();        
+            // dd($completedProjectsTasks);
+    
+            $totalTimeTasks = DurationTask::where("user_id", $user->id)->pluck('time')->toArray();
+    
+            $totalTimeTasksSum = array_sum(array_map('intval', $totalTimeTasks));
+    
             return response()->json([
                 'user' => $user,
-                'completion_rate' => $completionRate,
+                'completion_rate_todos' => $completionRateTodos,
+                'completion_rate_projects' => $completedProjects,
+                'total_projects_tasks' => $totalProjectsTasks,
+                'completion_rate_projects_tasks' => $completedProjectsTasks,
+                'total_time_tasks' => $totalTimeTasksSum,
             ], 200);
         } catch (\Throwable $th) {
             return response()->json(['msg' => $th->getMessage()], 500);
         }    
     }
+    
 
     function deviceLogout(Request $request, $android_id){
         try {

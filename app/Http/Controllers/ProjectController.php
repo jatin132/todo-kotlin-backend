@@ -65,6 +65,7 @@ class ProjectController extends Controller
             $project->project_name = $request->input("project_name");
             // dd($project->project_name);
             $project->project_description = $request->input("project_description");
+            $project->is_completed = $request->input("is_completed");
 
             $project->save();
 

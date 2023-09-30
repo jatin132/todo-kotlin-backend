@@ -44,4 +44,9 @@ class Todo extends Model
         return $this->belongsTo(User::class, 'user_id');
     }  
 
+    public function projectsTasks()
+    {
+        return $this->belongsToMany(Project::class, 'project_tasks', 'task_id', 'project_id');
+    }
+
 }

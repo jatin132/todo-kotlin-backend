@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('project_name');
             $table->string('project_description');
             $table->string('cover_photo')->nullable();
+            $table->integer('is_completed')->nullable();
             $table->timestamps();
         });
     }

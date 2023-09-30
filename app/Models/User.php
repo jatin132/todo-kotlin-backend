@@ -61,6 +61,11 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'projects');
     }
 
+    public function projectsTasks()
+    {
+        return $this->belongsToMany(Project::class, 'project_tasks', 'user_id', 'project_id');
+    }
+
     /**
      * The roles that belong to the DurationTask
      *

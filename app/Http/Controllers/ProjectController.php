@@ -78,12 +78,13 @@ class ProjectController extends Controller
     function getProjects(Request $request, $user_id){
         try {
             $userProjects = Project::where('user_id', $user_id)
-                                    ->with('members')
-                                    ->with(['tasks' => function ($query) {
-                                        $query->with('user'); 
-                                    }])
-                                    ->orderBy('created_at', 'desc')
-                                    ->get();
+            ->with('members')
+            ->with(['tasks' => function ($query) {
+                $query->with('user'); 
+            }])
+            ->orderBy('created_at', 'desc')
+            ->get();
+                                    
             if (!$userProjects) {
                 return response()->json(['msg'=>'User not found!'], 422);
             }

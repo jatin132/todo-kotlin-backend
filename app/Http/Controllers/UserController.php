@@ -71,10 +71,13 @@ class UserController extends Controller
     function getUserDetails(Request $request){
         try {
             $user = $request->user()
-                ->withCount('projects')
-                ->withCount('todos')
-                ->withCount('durationTasks')
-                ->first();
+            ->withCount('projects')
+            ->withCount('todos')
+            ->withCount('durationTasks')
+            ->with(['addedMembers' => function ($query) {
+                $query->select('users.id', 'users.uuid', 'users.profile_photo', 'users.username', 'users.email');
+            }])
+            ->first();        
     
             if (!$user) {
                 return response()->json(['msg' => 'User not found!'], 404);

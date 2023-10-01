@@ -6,9 +6,11 @@ use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DurationTaskController;
+use App\Http\Controllers\InvitationStatus;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RemoveAddedMembers;
 use App\Http\Controllers\TodoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -57,8 +59,15 @@ Route::group(["middleware"=> ['auth:sanctum']], function (){
         // add member routes
         $route->post('/add-member-profile/{user_id}', [AddMemberController::class, 'addMembersToProfile']);
         $route->post('/add-member-project/{project_id}', [AddMemberController::class, 'addMembersToProject']);
-        $route->get('/get-added-members/{user_id}', [AddMemberController::class, 'getAddedMembers']);
         $route->get('/search-users/{user_id}', [AddMemberController::class, 'searchUsers']);
+
+        // remove member routes
+        $route->delete('/remove-member-profile/{user_id}', [RemoveAddedMembers::class, 'removeMembersToProfile']);
+        $route->delete('/remove-member-project/{project_id}/{user_id}', [RemoveAddedMembers::class, 'removeMembersToProject']);
+
+        // accept or decline invitation routes
+        // $route->post('/accept-invitation/{user_id}', [InvitationStatus::class, 'removeMembersToProfile']);
+        // $route->post('/decline-invitation/{project_id}/{user_id}', [InvitationStatus::class, 'removeMembersToProject']);
 
         // add task to project
         $route->post('/member-add-tasks/{task_id}/{project_id}/{member_id}', [AddProjectTaskController::class, 'addTaskToProject']);

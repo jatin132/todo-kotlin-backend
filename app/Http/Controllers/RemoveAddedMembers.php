@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Project as ModelsProject;
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
-use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
-class AddMemberController extends Controller
+class RemoveAddedMembers extends Controller
 {
-    public function addMembersToProfile(Request $request, $user_id){
+    public function removeMembersToProfile(Request $request, $user_id){
         try {
             $user = User::find($user_id);
 
@@ -48,9 +47,9 @@ class AddMemberController extends Controller
         }
     }
 
-    public function addMembersToProject(Request $request, $project_id){
+    public function removeMembersToProject(Request $request, $project_id){
         try {
-            $project = ModelsProject::find($project_id);
+            $project = Project::find($project_id);
     
             if (!$project) {
                 return response()->json(['msg' => 'Project not found.'], 404);
@@ -84,30 +83,6 @@ class AddMemberController extends Controller
     
         } catch (\Throwable $th) {
             return response()->json(['msg' => $th->getMessage()], 500);
-        }
-    }
-
-    function searchUsers(Request $request, $user_id){
-        try {
-            $limit = 10;
-            $user = User::where('id', $user_id)->first();
-            $query = $request->input('query');
-            if (!$user) {
-                return response()->json(['msg' => 'User not found.'], 404);
-            }
-
-            if (!$query) {
-                return response()->json(['msg' => 'Query not found.'], 404);
-            }
-
-            $results = User::where('username', 'like', '%'. $query . '%')
-                                ->where('id', '<>', $user->id) 
-                                ->orderBy('created_at', 'desc')
-                                ->paginate($limit);
-            
-            return response()->json($results, 200);
-        } catch (\Throwable $th) {
-            return response()->json(['msg'=>$th->getMessage()], 500);
         }
     }
 }

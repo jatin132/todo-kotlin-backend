@@ -62,7 +62,7 @@ Route::group(["middleware"=> ['auth:sanctum']], function (){
         $route->get('/search-users/{user_id}', [AddMemberController::class, 'searchUsers']);
 
         // remove member routes
-        $route->delete('/remove-member-profile/{user_id}', [RemoveAddedMembers::class, 'removeMembersToProfile']);
+        $route->delete('/remove-member-profile/{user_id}/{member_user_id}', [RemoveAddedMembers::class, 'removeMembersToProfile']);
         $route->delete('/remove-member-project/{project_id}/{user_id}', [RemoveAddedMembers::class, 'removeMembersToProject']);
 
         // accept or decline invitation routes

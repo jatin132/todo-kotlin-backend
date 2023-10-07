@@ -19,6 +19,9 @@ class AccountUpdate extends Model
         'sender_id',
         'type',
         'is_read',
-        'byte_id',
+        'user_id',
+        'project_id',
+        'todo_id',
+        'task_id',
     ];
 }

@@ -57,8 +57,8 @@ class Project extends Model
      */
     public function members()
     {
-        return $this->belongsToMany(Project::class, 'project_members');
-    }
+        return $this->belongsToMany(User::class, 'project_members', 'project_id', 'member_id');
+    }    
 
     /**
      * The roles that belong to the DurationTask

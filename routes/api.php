@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DurationTaskController;
 use App\Http\Controllers\InvitationStatus;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProjectController;
@@ -93,5 +94,7 @@ Route::group(["middleware"=> ['auth:sanctum']], function (){
         $route->get('/get-today-todos/{user_id}/{current_date}', [TodoController::class, 'getTodayTodos']); // complete
         $route->get('/get-all-todos/{user_id}', [TodoController::class, 'getAllTodos']); // complete
 
+        // notification routes
+        $route->get('/get-notifications/{receiver_id}', [NotificationController::class, 'getNotifications']); // complete
     });
 });
